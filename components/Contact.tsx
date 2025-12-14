@@ -4,7 +4,7 @@ import { Mail, Github, Linkedin, Send, CheckCircle } from 'lucide-react';
 
 export const Contact: React.FC = () => {
   const [success, setSuccess] = useState(false);
-  const redirect_url = import.meta.env.BASE_URL + 'thank-you';
+  const redirect_url = import.meta.env.VITE_BASE_URL + '/thank-you';
   console.log(redirect_url)
 
   return (
