@@ -23,7 +23,6 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         { name: "Education", href: "#education" },
         { name: "Skills", href: "#skills" },
         { name: "Projects", href: "#projects" },
-        { name: "Research", href: "#about" }, // links to Research inside About
         { name: "Contact", href: "#contact" },
     ];
 
