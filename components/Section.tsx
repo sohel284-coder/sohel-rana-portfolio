@@ -1,40 +1,59 @@
-import React from 'react';
-
-interface SectionProps {
+import { useEffect, useRef, type ReactNode } from "react";
+export function Section({
+  id,
+  title,
+  subtitle,
+  children,
+  className = "",
+  number,
+}: {
   id: string;
   title?: string;
   subtitle?: string;
+  children: ReactNode;
   className?: string;
-  children: React.ReactNode;
+  number?: string;
   light?: boolean;
-}
-
-export const Section: React.FC<SectionProps> = ({ id, title, subtitle, className = "", children, light = false }) => {
+}) {
+  const ref = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!ref.current || !("IntersectionObserver" in window)) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("revealed");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.06 },
+    );
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
   return (
-    <section 
-      id={id} 
-      className={`py-20 px-6 md:px-12 lg:px-24 ${light ? 'bg-white' : 'bg-slate-50'} ${className}`}
+    <section
+      ref={ref}
+      id={id}
+      className={`section ${className}`}
+      aria-labelledby={`${id}-title`}
     >
-      <div className="max-w-6xl mx-auto">
-        {(title || subtitle) && (
-          <div className="mb-12 text-center">
-            {title && (
-              <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900 mb-4 tracking-tight">
-                {title}
-              </h2>
-            )}
-            {subtitle && (
-              <div className="w-24 h-1 bg-academic-600 mx-auto rounded-full mb-4"></div>
-            )}
-            {subtitle && (
-              <p className="text-slate-600 max-w-2xl mx-auto text-lg leading-relaxed">
-                {subtitle}
+      <div className="container">
+        {title && (
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">
+                {number && <span>{number} / </span>}
+                {id === "work" ? "Selected work" : id}
               </p>
-            )}
+              <h2 id={`${id}-title`}>{title}</h2>
+            </div>
+            {subtitle && <p>{subtitle}</p>}
           </div>
         )}
         {children}
       </div>
     </section>
   );
-};
+}

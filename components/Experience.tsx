@@ -1,71 +1,81 @@
-import React from 'react';
-import { Section } from './Section';
-import { Briefcase } from 'lucide-react';
-
-export const Experience: React.FC = () => {
+import { Section } from "./Section";
+export function Experience() {
   return (
-    <Section id="experience" title="Professional Experience" subtitle="A track record of engineering excellence in enterprise environments." light>
-      <div className="relative max-w-4xl mx-auto pl-8 border-l-2 border-academic-200 space-y-12">
-        
-        {/* Role 1: Innoweb */}
-        <div className="relative">
-          <div className="absolute -left-[41px] bg-academic-600 p-2 rounded-full text-white ring-4 ring-white">
-            <Briefcase size={16} />
+    <Section
+      id="experience"
+      number="03"
+      title="A career built in production."
+      subtitle="From commercial web applications to enterprise workflows and document systems."
+    >
+      <div className="timeline">
+        <article className="career">
+          <div className="career-date">
+            December 2022 — Present<span>Dhaka, Bangladesh</span>
           </div>
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-            <span className="text-sm font-semibold text-academic-600 uppercase tracking-wider">Current Role</span>
-            <div className="flex flex-col md:flex-row md:justify-between md:items-start mt-1 mb-2">
-                <h3 className="text-xl font-bold text-slate-900">Senior Developer (Full-Stack)</h3>
-                <span className="text-sm font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full whitespace-nowrap mt-2 md:mt-0 w-fit">Dec 2022 – Present</span>
+          <div className="career-content">
+            <h3>DataFort Limited</h3>
+            <div className="role-progression">
+              <div>
+                <strong>Software Engineer</strong>
+                <span>July 2024 — Present</span>
+              </div>
+              <div>
+                <strong>Mid-Level Software Engineer</strong>
+                <span>December 2022 — July 2024</span>
+              </div>
             </div>
-            <p className="text-slate-600 font-medium mb-4">Innoweb Ltd. (Product: robo2mation.com) • Dhaka, Bangladesh</p>
-            
-            <ul className="list-disc ml-5 space-y-3 text-slate-700 text-sm leading-relaxed">
+            <p>
+              I build and maintain full-stack features for Robo2mation, working
+              across workflow execution, document management, APIs, and
+              enterprise integrations.
+            </p>
+            <ul>
               <li>
-                <strong className="text-slate-900">Full-Stack Development:</strong> Developed core backend and frontend features for the Workflow Automation and Document Management Systems (DMS) using Django REST Framework and modern JavaScript/UI tools.
+                Deliver configurable application features with Django and
+                JavaScript/jQuery.
               </li>
               <li>
-                <strong className="text-slate-900">Intelligent Automation:</strong> Built advanced document-processing pipelines integrating Tesseract OCR, GPT-based automation, and WeasyPrint PDF generation.
+                Support secure access, production troubleshooting, and
+                deployment and migration work with DevOps.
               </li>
               <li>
-                <strong className="text-slate-900">Business Impact:</strong> Delivered major client-specific features by converting complex business workflows into scalable, secure software solutions; contributed to the mobile app (Flutter) for extended platform reach.
+                Contribute to AI-assisted document processing and Flutter/Dart
+                mobile features.
+              </li>
+            </ul>
+            <p className="career-note">
+              This work previously sat under Innoweb within the same group.
+            </p>
+          </div>
+        </article>
+        <article className="career">
+          <div className="career-date">
+            October 2020 — November 2022<span>Dhaka, Bangladesh</span>
+          </div>
+          <div className="career-content">
+            <h3>PyronLab</h3>
+            <div className="role-progression">
+              <div>
+                <strong>Junior Software Engineer</strong>
+              </div>
+            </div>
+            <p>
+              I developed and maintained commercial applications across
+              nanaya.co, Imarat.com.bd, PyronConverter, and ChangeUnit.
+            </p>
+            <ul>
+              <li>
+                Worked on backend business logic, REST APIs, and frontend
+                interfaces with Django, JavaScript, jQuery, and Vue.js.
               </li>
               <li>
-                <strong className="text-slate-900">System Integration & Security:</strong> Integrated large enterprise systems (banking & telecom) using secure LDAP/SSO and API-based communication; strengthened security by resolving VAPT findings and optimizing PostgreSQL schemas.
-              </li>
-              <li>
-                <strong className="text-slate-900">DevOps & Quality:</strong> Collaborated with DevOps on Docker deployments, CI/CD (GitHub Actions), and production stability; worked with SQA to enhance testing quality and ensure reliable releases.
-              </li>
-              <li>
-                <strong className="text-slate-900">Mentorship & Leadership:</strong> Mentored junior developers, provided rigorous code reviews, and guided best practices in API design and secure development.
+                Supported deployments on DigitalOcean with Linux, Nginx, and
+                Gunicorn, alongside production fixes and refactoring.
               </li>
             </ul>
           </div>
-        </div>
-
-        {/* Role 2: PyronLab */}
-        <div className="relative">
-          <div className="absolute -left-[41px] bg-slate-400 p-2 rounded-full text-white ring-4 ring-white">
-            <Briefcase size={16} />
-          </div>
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-             <span className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Previous Role</span>
-             <div className="flex flex-col md:flex-row md:justify-between md:items-start mt-1 mb-2">
-                <h3 className="text-xl font-bold text-slate-900">Junior Software Engineer</h3>
-                <span className="text-sm font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full whitespace-nowrap mt-2 md:mt-0 w-fit">Oct 2020 – Nov 2022</span>
-            </div>
-            <p className="text-slate-600 font-medium mb-4">PyronLab • Dhaka, Bangladesh</p>
-            
-            <ul className="list-disc ml-5 space-y-2 text-slate-700 text-sm leading-relaxed">
-              <li>Contributed to full-stack development for social platforms, real-estate portals, and utilities.</li>
-              <li>Developed and maintained REST APIs and interactive frontends using Django, jQuery, and HTML/CSS.</li>
-              <li>Optimized application performance through debugging and refactoring in a rapid development environment.</li>
-              <li>Collaborated effectively within an Agile startup team on high-impact features.</li>
-            </ul>
-          </div>
-        </div>
-
+        </article>
       </div>
     </Section>
   );
-};
+}

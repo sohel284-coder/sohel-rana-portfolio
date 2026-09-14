@@ -1,45 +1,38 @@
-import React from 'react';
-import { CheckCircle, ArrowLeft, Mail } from 'lucide-react';
-
-export const ThankYou: React.FC = () => {
+import { useEffect } from "react";
+import { useLocation, Link } from "react-router-dom";
+import { ArrowLeft, Mail } from "lucide-react";
+import { Layout } from "./Layout";
+import { profile } from "../data";
+export function ThankYou() {
+  const location = useLocation();
+  const confirmed = location.state?.submitted === true;
+  useEffect(() => {
+    document.title = "Thank you | Sohel Rana";
+    return () => {
+      document.title = "Sohel Rana | Software Engineer";
+    };
+  }, []);
   return (
-    <section className="min-h-screen flex items-center justify-center bg-slate-50 px-6">
-      <div className="max-w-lg w-full bg-white rounded-2xl shadow-xl p-10 text-center">
-
-        <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-6" />
-
-        <h1 className="text-3xl font-serif font-bold text-slate-800 mb-4">
-          Thank You!
+    <Layout>
+      <section className="thank-you container">
+        <p className="eyebrow">Get in touch</p>
+        <h1>
+          {confirmed ? "Thanks for your message." : "Thanks for stopping by."}
         </h1>
-
-        <p className="text-slate-600 mb-6 leading-relaxed">
-          Your message has been sent successfully.
-          I truly appreciate you taking the time to reach out.
+        <p>
+          {confirmed
+            ? "Your message was sent successfully. I appreciate you getting in touch."
+            : "If you’d like to talk about a role or a project, send me a message."}
         </p>
-
-        <p className="text-sm text-slate-500 mb-8">
-          I will review your message and respond as soon as possible.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a
-            href="/"
-            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-100 transition"
-          >
-            <ArrowLeft size={16} />
-            Back to Home
-          </a>
-
-          <a
-            href="mailto:srana.cse151@gmail.com"
-            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-academic-800 text-white rounded-lg hover:bg-academic-900 transition"
-          >
-            <Mail size={16} />
-            Email Me Directly
+        <div className="hero-actions">
+          <Link className="button secondary" to="/">
+            <ArrowLeft size={16} /> Back to home
+          </Link>
+          <a className="button primary" href={`mailto:${profile.email}`}>
+            <Mail size={16} /> Email me
           </a>
         </div>
-
-      </div>
-    </section>
+      </section>
+    </Layout>
   );
-};
+}

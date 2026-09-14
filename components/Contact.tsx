@@ -1,143 +1,148 @@
-import React, { useState } from 'react';
-import { Section } from './Section';
-import { Mail, Github, Linkedin, Send, CheckCircle } from 'lucide-react';
-
-export const Contact: React.FC = () => {
-  const [success, setSuccess] = useState(false);
-  const redirect_url = import.meta.env.VITE_BASE_URL + '/thank-you';
-  console.log(redirect_url)
-
+import { useRef, useState, type FormEvent } from "react";
+import { ArrowRight, ArrowUpRight, CheckCircle } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Section } from "./Section";
+import { CVLink } from "./CVLink";
+import { profile } from "../data";
+export function Contact() {
+  const [status, setStatus] = useState<
+    "idle" | "pending" | "success" | "failure"
+  >("idle");
+  const submitting = useRef(false);
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (submitting.current) return;
+    const form = event.currentTarget;
+    const body = new FormData(form);
+    submitting.current = true;
+    setStatus("pending");
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 20000);
+    try {
+      const response = await fetch("https://formspree.io/f/mvgeyzpn", {
+        method: "POST",
+        body,
+        headers: { Accept: "application/json" },
+        signal: controller.signal,
+      });
+      if (!response.ok) throw new Error("Submission failed");
+      setStatus("success");
+      form.reset();
+    } catch {
+      setStatus("failure");
+    } finally {
+      window.clearTimeout(timeout);
+      submitting.current = false;
+    }
+  }
   return (
     <Section
       id="contact"
-      title="Get In Touch"
-      subtitle="Available for research collaborations and software engineering roles."
+      number="05"
+      title="Let’s talk about what’s next."
+      className="contact-section"
     >
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">
-
-        {/* LEFT SIDE */}
-        <div className="bg-academic-900 text-white p-10 md:w-2/5 flex flex-col justify-between">
-          <div>
-            <h3 className="text-2xl font-serif font-bold mb-6">
-              Contact Information
-            </h3>
-
-            <p className="text-academic-100 mb-8 leading-relaxed">
-              I am currently open to discussing Higher Study opportunities (Masters)
-              and Software Engineering roles.
-            </p>
-
-            <div className="space-y-6">
-              <a
-                href="mailto:srana.cse151@gmail.com"
-                className="flex items-center gap-3 hover:text-academic-200 transition-colors"
-              >
-                <Mail className="w-5 h-5" />
-                <span className="text-sm font-medium">srana.cse151@gmail.com</span>
-              </a>
-
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-3 hover:text-academic-200 transition-colors"
-              >
-                <Linkedin className="w-5 h-5" />
-                <span className="text-sm font-medium">LinkedIn Profile</span>
-              </a>
-
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-3 hover:text-academic-200 transition-colors"
-              >
-                <Github className="w-5 h-5" />
-                <span className="text-sm font-medium">GitHub Profile</span>
-              </a>
-            </div>
-          </div>
-
-          <p className="text-xs text-academic-300 opacity-60 mt-12">
-            &copy; {new Date().getFullYear()} Sohel Rana
+      <div className="contact-grid">
+        <div className="contact-copy">
+          <p>
+            If you’d like to talk about a role or a project, send me a message.
           </p>
+          <a className="email-link" href={`mailto:${profile.email}`}>
+            {profile.email}
+            <ArrowUpRight size={20} />
+          </a>
+          <div className="social-links">
+            <a href={profile.github} target="_blank" rel="noreferrer">
+              GitHub <ArrowUpRight size={15} />
+            </a>
+            <a href={profile.linkedin} target="_blank" rel="noreferrer">
+              LinkedIn <ArrowUpRight size={15} />
+            </a>
+          </div>
+          <CVLink />
+          <p className="contact-location">Based in Dhaka, Bangladesh.</p>
         </div>
-
-        {/* RIGHT SIDE */}
-        <div className="p-10 md:w-3/5 relative">
-          <h3 className="text-2xl font-bold text-slate-800 mb-6">
-            Send a Message
-          </h3>
-
-          {/* SUCCESS ANIMATION */}
-          {success && (
-            <div className="absolute inset-0 bg-white/95 flex flex-col items-center justify-center z-10 animate-fadeIn">
-              <CheckCircle className="w-16 h-16 text-green-600 mb-4 animate-scaleIn" />
-              <p className="text-lg font-semibold text-slate-800">
-                Message Sent Successfully!
-              </p>
-              <p className="text-sm text-slate-500 mt-1">
-                Thank you for reaching out. I’ll reply soon.
-              </p>
+        <form onSubmit={submit} aria-busy={status === "pending"}>
+          <fieldset disabled={status === "pending" || status === "success"}>
+            <legend className="sr-only">Send a message</legend>
+            <div className="form-pair">
+              <div>
+                <label htmlFor="name">Your name</label>
+                <input
+                  id="name"
+                  name="name"
+                  autoComplete="name"
+                  required
+                  placeholder="Name"
+                />
+              </div>
+              <div>
+                <label htmlFor="email">Email address</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  placeholder="you@example.com"
+                />
+              </div>
             </div>
-          )}
-
-          {/* FORMSpree FORM */}
-          <form
-            action="https://formspree.io/f/mvgeyzpn"
-            method="POST"
-            className="space-y-6"
-            onSubmit={() => {
-              setTimeout(() => setSuccess(true), 300);
-              setTimeout(() => setSuccess(false), 6000);
-            }}
-          >
-            <input type="hidden" name="_redirect" value={redirect_url} />
-            <div className="grid grid-cols-2 gap-6">
-              <input
-                name="name"
-                required
-                placeholder="Name"
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-academic-500 outline-none"
-              />
-
-              <input
-                name="email"
-                type="email"
-                required
-                placeholder="Email"
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-academic-500 outline-none"
-              />
-            </div>
-
+            <label htmlFor="subject">Subject</label>
             <input
+              id="subject"
               name="subject"
               required
-              placeholder="Subject"
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-academic-500 outline-none"
+              placeholder="What would you like to discuss?"
             />
-
+            <label htmlFor="message">Message</label>
             <textarea
+              id="message"
               name="message"
               rows={4}
               required
-              placeholder="Write your message here..."
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg resize-none focus:ring-2 focus:ring-academic-500 outline-none"
+              placeholder="Tell me a little about the role or project…"
             />
-
-            {/* Anti-spam honeypot (Formspree feature) */}
-            <input type="text" name="_gotcha" className="hidden" />
-
-            <button
-              type="submit"
-              className="w-full py-3 bg-academic-800 text-white font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-academic-900 transition-colors"
-            >
-              <Send size={18} />
-              Send Message
+            <input
+              name="_gotcha"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              className="honeypot"
+              aria-hidden="true"
+            />
+            <button className="button primary" type="submit">
+              {status === "pending"
+                ? "Sending…"
+                : status === "success"
+                  ? "Message sent"
+                  : "Send message"}
+              <ArrowRight size={17} />
             </button>
-          </form>
-        </div>
+          </fieldset>
+          <div className="form-status" aria-live="polite" aria-atomic="true">
+            {status === "pending" && <p>Sending your message…</p>}
+            {status === "success" && (
+              <p className="success">
+                <CheckCircle size={18} /> Your message was sent. Thank you for
+                getting in touch.{" "}
+                <Link to="/thank-you" state={{ submitted: true }}>
+                  Continue <ArrowRight size={14} />
+                </Link>
+              </p>
+            )}
+          </div>
+          {status === "failure" && (
+            <p className="form-error" role="alert">
+              I couldn’t confirm your message was sent. Your text is still here;
+              please try again or email me directly.
+            </p>
+          )}
+          <p className="form-note">
+            Sent through Formspree. You can also email me directly.
+          </p>
+        </form>
       </div>
     </Section>
   );
-};
+}

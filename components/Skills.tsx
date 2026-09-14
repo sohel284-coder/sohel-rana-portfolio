@@ -1,61 +1,82 @@
-import React from 'react';
-import { Section } from './Section';
-import { SkillCategory } from '../types';
-import { Server, Brain, Layout, Settings, Shield, Terminal } from 'lucide-react';
+import {
+  ArrowUpRight,
+  Code2,
+  Database,
+  ScanText,
+  ShieldCheck,
+  Plus,
+} from "lucide-react";
+import { Section } from "./Section";
+import { skills } from "../data";
 
-const skillData: SkillCategory[] = [
-  {
-    title: "Backend Engineering",
-    icon: Server,
-    skills: ["Python", "Django", "FastAPI", "Django REST Framework (DRF)", "PostgreSQL", "MySQL", "MongoDB", "Redis", "Celery", "WebSockets", "System Design"]
-  },
-  {
-    title: "Frontend Development",
-    icon: Layout,
-    skills: ["JavaScript (ES6+)", "TypeScript", "React.js", "Next.js", "Vue.js", "Redux", "Context API", "jQuery", "Bootstrap", "Tailwind CSS", "HTML5/CSS3"]
-  },
-  {
-    title: "AI & Automation",
-    icon: Brain,
-    skills: ["Tesseract OCR", "OpenAI GPT API Integration", "Intelligent Document Processing", "Automated Workflows"]
-  },
-  {
-    title: "DevOps & Systems",
-    icon: Settings,
-    skills: ["Docker", "GitHub Actions (CI/CD)", "Linux Administration", "Nginx", "Gunicorn", "AWS (Basic)", "DigitalOcean"]
-  },
-  {
-    title: "Security",
-    icon: Shield,
-    skills: ["VAPT Remediation", "LDAP/SSO Integration", "Secure API Design", "OAuth 2.0", "JWT Authentication", "Role-Based Access Control"]
-  },
-  {
-    title: "Tools & Collaboration",
-    icon: Terminal,
-    skills: ["Git/GitHub", "Postman", "Jira", "VS Code", "Agile/Scrum", "Swagger/OpenAPI"]
-  }
-];
+const supportingIcons = [Code2, Database, ScanText, ShieldCheck];
 
-export const Skills: React.FC = () => {
+export function Skills() {
+  const [backend, ...supporting] = skills;
   return (
-    <Section id="skills" title="Technical Proficiency" subtitle="A comprehensive toolkit for building modern, scalable software solutions.">
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {skillData.map((category, idx) => (
-          <div key={idx} className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
-            <div className="flex items-center gap-3 mb-4 border-b border-slate-100 pb-3">
-              <category.icon className="text-academic-600 w-6 h-6" />
-              <h3 className="font-bold text-slate-800 text-lg">{category.title}</h3>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {category.skills.map((skill, sIdx) => (
-                <span key={sIdx} className="px-3 py-1 bg-slate-50 text-slate-700 text-sm font-medium rounded-full border border-slate-200">
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
+    <Section
+      id="skills"
+      number="01"
+      title="Python at the core. Full-stack in practice."
+      subtitle="I work across the backend, interface, and deployment, with a growing focus on applied AI."
+    >
+      <div className="skills-overview">
+        <div className="skills-foundation">
+          <p className="eyebrow">{backend.title}</p>
+          <h3>
+            Python.
+            <br />
+            Django.
+            <br />
+            <span>APIs that connect the work.</span>
+          </h3>
+          <p>
+            I build backend services for business applications, from
+            configurable workflows to document management and third-party
+            integrations.
+          </p>
+          <p className="foundation-framework">
+            Django REST Framework · REST APIs
+          </p>
+          <a href="#work" className="text-link">
+            See it in my work <ArrowUpRight size={16} aria-hidden="true" />
+          </a>
+        </div>
+        <div className="skills-supporting">
+          {supporting.map((skill, index) => {
+            const Icon = supportingIcons[index];
+            return (
+              <div className="skill-capability" key={skill.title}>
+                <Icon size={20} aria-hidden="true" />
+                <div>
+                  <h3>{skill.title}</h3>
+                  <p className="capability-tools">{skill.text}</p>
+                  <p className="capability-context">{skill.note}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
+      <details className="skills-details">
+        <summary>
+          More tools & technologies <Plus size={18} aria-hidden="true" />
+        </summary>
+        <div className="skills-detail-list">
+          {skills.map((skill) => (
+            <div key={skill.title}>
+              <h3>{skill.title}</h3>
+              <p>{skill.more}</p>
+            </div>
+          ))}
+          <div>
+            <h3>Development tools</h3>
+            <p>
+              Git · Postman · PyCharm · VS Code · Claude Code · Codex · OpenCode
+            </p>
+          </div>
+        </div>
+      </details>
     </Section>
   );
-};
+}

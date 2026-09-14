@@ -1,89 +1,118 @@
-import React from 'react';
-import { ArrowRight, Download, Mail } from 'lucide-react';
-
-export const Hero: React.FC = () => {
+import {
+  ArrowRight,
+  FileText,
+  Workflow,
+  Braces,
+  Check,
+  ArrowDown,
+  MapPin,
+} from "lucide-react";
+import { CVLink } from "./CVLink";
+export function Hero() {
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-academic-900 to-slate-800 text-white overflow-hidden pt-16">
-
-      {/* Background Pattern */}
-      <div
-        className="absolute inset-0 opacity-10"
-        style={{
-          backgroundImage: `radial-gradient(#ffffff 1px, transparent 1px)`,
-          backgroundSize: '30px 30px'
-        }}
-      ></div>
-
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
-
-        {/* Availability Badge */}
-        <div className="inline-block px-4 py-1.5 mb-6 border border-academic-500/30 rounded-full bg-academic-500/10 backdrop-blur-sm">
-          <span className="text-academic-100 font-medium tracking-wide text-sm uppercase">
-            Open for Research & Higher Study Opportunities
-          </span>
+    <section id="home" className="hero container">
+      <div className="hero-main">
+        <div className="hero-copy">
+          <p className="eyebrow entrance">
+            Sohel Rana <span className="dot" /> Software Engineer
+          </p>
+          <h1 className="entrance">
+            Business software,
+            <br />
+            from workflows
+            <br />
+            to <span>applied AI.</span>
+          </h1>
+          <p className="hero-intro entrance">
+            I’m Sohel, a software engineer based in Dhaka. I build business
+            applications with Python and Django—from approval workflows and
+            document tools to the APIs and interfaces behind them.
+          </p>
+          <p className="hero-follow entrance">
+            More recently, I’ve been working with language models to turn
+            documents into usable data.
+          </p>
+          <div className="hero-actions entrance">
+            <a className="button primary" href="#work">
+              View my work <ArrowRight size={17} />
+            </a>
+            <CVLink />
+          </div>
+          <a className="quiet-link entrance" href="#contact">
+            Have a role or project in mind? Let’s talk <ArrowRight size={14} />
+          </a>
         </div>
-
-        {/* Name */}
-        <h1 className="text-5xl md:text-7xl font-serif font-bold mb-6 tracking-tight leading-tight">
-          Sohel Rana
-        </h1>
-
-        {/* Professional Title */}
-        <h2 className="text-xl md:text-2xl text-academic-100 font-light mb-6 max-w-3xl mx-auto leading-relaxed">
-          Software Engineer | Python & Django | Enterprise Systems | AI Automation
-        </h2>
-
-        {/* Tech Stack */}
-        <p className="text-md text-slate-400 mb-8">
-          Python • Django • REST APIs • AI Automation • GPT Integration • Scalable Backend Systems
-        </p>
-
-        {/* Tagline */}
-        <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto mb-10 italic font-light">
-          Building intelligent, scalable, and reliable software systems for real-world applications.
-        </p>
-
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-
-          {/* View Projects */}
-          <a
-            href="#projects"
-            className="group px-8 py-3.5 bg-white text-academic-900 font-semibold rounded-lg shadow-lg hover:bg-slate-100 transition-all flex items-center gap-2"
+        <figure className="workflow-figure entrance">
+          <div className="diagram-heading">
+            <span className="eyebrow">From input to action</span>
+            <span className="diagram-index">01 — 03</span>
+          </div>
+          <div
+            className="workflow-art"
+            role="img"
+            aria-label="Illustrative workflow: documents and emails move through rules, APIs, and AI assistance into reviewable records."
           >
-            View Projects
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </a>
-
-          {/* Contact */}
-          <a
-            href="#contact"
-            className="px-8 py-3.5 bg-academic-600/20 border border-academic-500/50 text-white font-medium rounded-lg hover:bg-academic-600/30 backdrop-blur-sm transition-all flex items-center gap-2"
-          >
-            <Mail className="w-4 h-4" />
-            Contact Me
-          </a>
-
-          {/* CV */}
-          <a
-            href="/Sohel_Rana_CV.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-8 py-3.5 bg-transparent border border-slate-500 text-slate-200 font-medium rounded-lg hover:bg-slate-800/50 transition-all flex items-center gap-2"
-          >
-            <Download className="w-4 h-4" />
-            View CV
-          </a>
-
-        </div>
+            <div className="orbit orbit-one" />
+            <div className="orbit orbit-two" />
+            <div className="flow-node input-node">
+              <span className="node-icon">
+                <FileText size={22} />
+              </span>
+              <div>
+                <small>01 / INPUT</small>
+                <strong>Documents & emails</strong>
+              </div>
+              <span className="paper-lines">
+                <i />
+                <i />
+                <i />
+              </span>
+            </div>
+            <div className="connector first">
+              <ArrowDown size={18} />
+            </div>
+            <div className="flow-node process-node">
+              <span className="node-icon">
+                <Workflow size={24} />
+              </span>
+              <div>
+                <small>02 / PROCESS</small>
+                <strong>Make information useful</strong>
+              </div>
+              <div className="process-tags">
+                <span>Rules</span>
+                <span>APIs</span>
+                <span>AI assistance</span>
+              </div>
+            </div>
+            <div className="connector second">
+              <ArrowDown size={18} />
+            </div>
+            <div className="flow-node output-node">
+              <span className="node-icon">
+                <Braces size={23} />
+              </span>
+              <div>
+                <small>03 / OUTPUT</small>
+                <strong>Reviewable records</strong>
+              </div>
+              <Check size={18} className="output-check" />
+            </div>
+          </div>
+          <figcaption>
+            <span className="tiny-dot" /> A sketch of the problems I work on.
+          </figcaption>
+        </figure>
       </div>
-
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-slate-400">
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-        </svg>
+      <div className="hero-foot">
+        <span>
+          <MapPin size={14} /> Dhaka, Bangladesh
+        </span>
+        <span>5+ years building professional software</span>
+        <a href="#skills">
+          Explore my skills <ArrowDown size={15} />
+        </a>
       </div>
     </section>
   );
-};
+}
