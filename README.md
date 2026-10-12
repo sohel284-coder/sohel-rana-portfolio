@@ -24,4 +24,6 @@ Content shared across projects, skills, and contact lives in `data.ts`. Styling 
 
 `/cv` is an unlinked, local development route. The update endpoint is only available during `npm run dev`; static hosting cannot write back into your project. The CV HTML editor is not included in the production build. Generated PDFs are public files, accessible to anyone who knows their URL.
 
+The two-page academic CV for Master's applications lives in `cv_extend.html`. With `npm run dev` running, open `http://localhost:3000/academic-cv` and click **Download PDF**. The PDF is rendered by headless Chrome on the dev server (`/academic-cv/download`), so browser print settings such as headers, footers and scale cannot add pages. Like `/cv`, it is a local development route only.
+
 `fonts/PlexSans.woff2` is included in the project and used by `cv.html` for both the local preview and generated PDFs.

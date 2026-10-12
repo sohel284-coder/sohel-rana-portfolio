@@ -8,7 +8,10 @@ import { pathToFileURL } from 'node:url';
 
 const exec = promisify(execFile);
 
-export async function publishCV(root: string) {
+// Render a CV page with headless Chrome. Doing this server-side (rather than
+// the browser's print dialog) means the browser's header/footer, margin and
+// scale settings can never change where the pages break.
+async function renderPdf(root: string, file: string) {
   const temporary = await mkdtemp(path.join(os.tmpdir(), 'portfolio-cv-'));
   try {
     const output = path.join(temporary, 'cv.pdf');
@@ -16,23 +19,28 @@ export async function publishCV(root: string) {
       '--headless', '--disable-gpu', '--no-pdf-header-footer',
       `--user-data-dir=${path.join(temporary, 'profile')}`,
       `--print-to-pdf=${output}`,
-      pathToFileURL(path.join(root, 'cv.html')).href,
+      pathToFileURL(path.join(root, file)).href,
     ], { timeout: 60000 });
     const pdf = await readFile(output);
     if (pdf.subarray(0, 5).toString() !== '%PDF-') throw new Error('Chrome did not generate a valid PDF.');
-    const directory = path.join(root, 'public', 'cv');
-    await mkdir(directory, { recursive: true });
-    const now = new Date();
-    const stamp = now.toLocaleString('sv-SE', { timeZone: 'Asia/Dhaka', hour12: false }).replace(/[ :]/g, '-');
-    const filename = `Sohel_Rana_CV_${stamp}-${now.getMilliseconds()}.pdf`;
-    await writeFile(path.join(directory, filename), pdf, { flag: 'wx' });
-    const latest = { url: `/cv/${filename}`, filename, updatedAt: now.toISOString() };
-    await writeFile(path.join(directory, 'latest.json.tmp'), JSON.stringify(latest, null, 2) + '\n');
-    await rename(path.join(directory, 'latest.json.tmp'), path.join(directory, 'latest.json'));
-    return latest;
+    return pdf;
   } finally {
     await rm(temporary, { recursive: true, force: true });
   }
+}
+
+export async function publishCV(root: string) {
+  const pdf = await renderPdf(root, 'cv.html');
+  const directory = path.join(root, 'public', 'cv');
+  await mkdir(directory, { recursive: true });
+  const now = new Date();
+  const stamp = now.toLocaleString('sv-SE', { timeZone: 'Asia/Dhaka', hour12: false }).replace(/[ :]/g, '-');
+  const filename = `Sohel_Rana_CV_${stamp}-${now.getMilliseconds()}.pdf`;
+  await writeFile(path.join(directory, filename), pdf, { flag: 'wx' });
+  const latest = { url: `/cv/${filename}`, filename, updatedAt: now.toISOString() };
+  await writeFile(path.join(directory, 'latest.json.tmp'), JSON.stringify(latest, null, 2) + '\n');
+  await rename(path.join(directory, 'latest.json.tmp'), path.join(directory, 'latest.json'));
+  return latest;
 }
 
 export function cvPlugin(): Plugin {
@@ -41,13 +49,27 @@ export function cvPlugin(): Plugin {
     name: 'local-cv-publisher',
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
-        const route = req.url?.split('?')[0];
-        if (route !== '/cv' && route !== '/cv/' && route !== '/__cv/update') return next();
+        const route = req.url?.split('?')[0]?.replace(/\/$/, '');
+        // Each preview route maps to a CV source file in the project root.
+        const pages: Record<string, string> = { '/cv': 'cv.html', '/academic-cv': 'cv_extend.html' };
+        const download = route === '/academic-cv/download';
+        if (!(route && route in pages) && route !== '/__cv/update' && !download) return next();
         res.setHeader('Cache-Control', 'no-store');
         try {
+          if (download) {
+            if (busy) { res.statusCode = 409; res.end('A PDF is already being generated.'); return; }
+            busy = true;
+            try {
+              const pdf = await renderPdf(server.config.root, 'cv_extend.html');
+              res.setHeader('Content-Type', 'application/pdf');
+              res.setHeader('Content-Disposition', 'attachment; filename="Sohel_Rana_Academic_CV.pdf"');
+              res.end(pdf);
+            } finally { busy = false; }
+            return;
+          }
           if (route !== '/__cv/update') {
             res.setHeader('Content-Type', 'text/html; charset=utf-8');
-            const html = await readFile(path.join(server.config.root, 'cv.html'), 'utf8');
+            const html = await readFile(path.join(server.config.root, pages[route!]), 'utf8');
             res.end(html.replace('<head>', '<head><base href="/">'));
             return;
           }

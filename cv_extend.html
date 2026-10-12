@@ -141,7 +141,11 @@ li::marker{color:#789B9F}
 
 /* ---------------- ACADEMIC CV ADDITIONS ---------------- */
 h2{break-after:avoid}
-.job,.proj,.edu,li{break-inside:avoid}
+/* A job may run onto the next page (keeping it whole left a large gap on
+   page 1); single bullets, projects and education entries stay intact,
+   and the job heading never sits alone at the bottom of a page. */
+.proj,.edu,li{break-inside:avoid}
+.job > .row,.job > .title,.job > .product{break-after:avoid}
 .page{padding-bottom:0}
 section{margin-top:3.2mm}
 .grade{font-size:8.1pt;color:var(--muted);margin-top:.2mm}
@@ -238,14 +242,10 @@ section{margin-top:3.2mm}
       <ul>
         <li>Build backend services and REST APIs with <strong>Python, Django, Django REST Framework and PostgreSQL</strong> that run workflows, manage data and power frontend features.</li>
         <li>Built <strong>OCR and GPT-based document processing</strong> that extracts, classifies and processes enterprise documents.</li>
-        <li>Develop <strong>no-code features</strong> (dynamic eForms, Master Tables, business rules and API connectors) so new client needs are handled through configuration instead of new custom code.</li>
-        <li>Extend the <strong>workflow engine</strong>: approval routing, task assignment, delegation and process tracking.</li>
-        <li>Build <strong>document-management</strong> features: uploads, metadata, versioning, sharing and <strong>Elasticsearch</strong>-based search.</li>
-        <li>Integrate the platform with client systems over <strong>REST, XML and JSON APIs</strong>, and run long tasks in the background with <strong>Celery and Redis</strong>.</li>
-        <li>Implement <strong>role-based permissions and LDAP/SSO</strong> login for enterprise clients, and fix issues found in <strong>VAPT</strong> security assessments.</li>
-        <li>Build the <strong>JavaScript/jQuery</strong> screens (form builder, dashboards, document screens and reports) and help with <strong>Flutter</strong> mobile features.</li>
-        <li>Find and fix complex production issues, and work with DevOps to deploy containerised applications with <strong>Docker and CI/CD</strong> pipelines.</li>
-        <li><strong>Mentor junior developers</strong>, review code, and take part in architecture discussions.</li>
+        <li>Develop <strong>no-code features</strong> (dynamic eForms, business rules, API connectors) and extend the <strong>workflow engine</strong>: approval routing, task assignment and delegation.</li>
+        <li>Build <strong>document-management</strong> features with <strong>Elasticsearch</strong>-based search, and integrate client systems over REST, XML and JSON APIs.</li>
+        <li>Implement <strong>role-based permissions and LDAP/SSO</strong> for enterprise clients, and fix issues found in <strong>VAPT</strong> security assessments.</li>
+        <li><strong>Mentor junior developers</strong>, review code, and work with DevOps on <strong>Docker and CI/CD</strong> deployments.</li>
       </ul>
     </div>
 
@@ -256,10 +256,8 @@ section{margin-top:3.2mm}
       </div>
       <div class="title">Junior Software Engineer</div>
       <ul>
-        <li>Developed backend services and frontend interfaces for commercial web apps (<strong>nanaya.co, Imarat.com.bd, PyronConverter and ChangeUnit</strong>) using <strong>Python, Django, JavaScript, jQuery and Vue.js</strong>.</li>
-        <li>Maintained and extended <strong>nanaya.co</strong>, a production platform for a US-based client with personality assessments, relationship compatibility tests, campaigns and surveys.</li>
-        <li>Built REST APIs and core business logic, added new features, and fixed complex bugs to improve stability and performance.</li>
-        <li>Deployed and maintained apps on <strong>DigitalOcean</strong> with Linux, Nginx and Gunicorn, improving reliability through debugging and refactoring.</li>
+        <li>Developed commercial web apps (<strong>nanaya.co, Imarat.com.bd, PyronConverter and ChangeUnit</strong>) with <strong>Python, Django, JavaScript and Vue.js</strong>, including nanaya.co, a US client's platform for personality assessments and surveys.</li>
+        <li>Built REST APIs and business logic, and deployed and maintained apps on <strong>DigitalOcean</strong> (Linux, Nginx, Gunicorn).</li>
       </ul>
     </div>
   </section>
@@ -354,7 +352,8 @@ section{margin-top:3.2mm}
   </section>
 
 </main>
-<!-- Opens the print dialog; choose "Save as PDF". The button is hidden in print. -->
-<button class="dl-btn" onclick="window.print()">Download PDF</button>
+<!-- On the dev server (/academic-cv) the PDF is rendered server-side so print
+     settings can't add pages; opened as a plain file it falls back to printing. -->
+<button class="dl-btn" onclick="location.protocol.startsWith('http') ? location.href = '/academic-cv/download' : window.print()">Download PDF</button>
 </body>
 </html>
